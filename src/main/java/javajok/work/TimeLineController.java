@@ -1,10 +1,12 @@
 package javajok.work;
 
 import com.sun.javafx.sg.prism.NGShape;
+import javajok.sample.Timeline;
 import javajok.sample.Tweet;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 
@@ -17,18 +19,10 @@ public class TimeLineController {
     @RequestMapping("/timeline")
 
     public String timeline(Model model){
-        Tweet tweet = new Tweet();
-        tweet.userId = "ken";
-        tweet.text = "こにちわ";
+        Timeline timeline = new RestTemplate().getForObject("http://simpletter.heroku.com/timeline", Timeline.class) ;
 
-        Tweet tweet2 = new Tweet();
-        tweet2.userId = "ken1";
-        tweet2.text = "こにちわ1";
+        model.addAttribute("timeline", timeline.tweets);
 
-        ArrayList<Tweet> timeline = new ArrayList<>();
-        timeline.add(tweet);
-        timeline.add(tweet2);
-        model.addAttribute("timeline", timeline);
         return("timeline");
     }
 
